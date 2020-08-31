@@ -1,5 +1,6 @@
 # angular-dialogflow-chatbot
 
+## Creating an angular project
 Open command prompt and navigate to the folder where you wish to create the application
 
 Create a new Angular project
@@ -65,6 +66,8 @@ imports: [
 
 With this done, we are now ready to jump into implementing this application.
 
+## Build the required components, models and services
+
 Create a new component named 'home'. We will use this as out landing route, and provide a navigation option from here to access the chatbot.
 ```
 ng g c home
@@ -88,5 +91,39 @@ const routes: Routes = [
 
 If you now go and refresh the link ```http://localhost:4200/``` you should see a page that says 'home works!', and using the link ```http://localhost:4200/chat ``` should show a page that says 'chatbot works!'
 
+Provide navigation links within the application to navigate between the routes. Update ```app.component.html``` with the options to navigate
+```
+<header>
+    <div class="container">
+        <a href="#" class="logo">Chatbot Application</a>
+        <nav>
+            <ul>
+                <li><a href="#" routerLink="/">Home</a></li>
+                <li><a href="#" routerLink="/chat">Chatbot</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<router-outlet></router-outlet>
+```
 
+Add the below code into ```home.component.html``` to display a different message when we land on the home screen instead of just 'home works!' 
+```
+<div class="container">
+    <h2>Welcome to the chatbot application!</h2>
+    <p>This is a chatbot application created to demostrate the Dialogflow chatbot integration. Use the navigation bar or <span (click) = "goToChat()">Click here</span> to try it out.</p>
+</div>
+```
 
+Notice that there is a try it out option provided within the home screen content as well, just to demonstrate routing from thr '.ts' file. 
+
+Import the angular router...
+```
+import { Router } from '@angular/router';
+```
+...and create the 'goToChat()' method that would navigate the application to the '/chat' route
+```
+  goToChat(): void {
+    this.router.navigateByUrl('/chat');
+  }
+```
