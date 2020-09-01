@@ -249,3 +249,5 @@ export class ChatbotComponent implements OnInit {
 
 }
 ```
+
+Refresh the link ```http://localhost:4200/```, we now have an interface where we can type and send text and a system that simply responds with a hardcoded message "*I'm still being built!*".
