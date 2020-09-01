@@ -127,3 +127,125 @@ import { Router } from '@angular/router';
     this.router.navigateByUrl('/chat');
   }
 ```
+
+Create a 'models' folder under 'src/app' and then create a file by the name 'message.ts' under it. We will use this to create a ```Message``` class that holds the content of the messages being exchanged between the bot and the user.
+```
+export class Message {
+  content: string;
+  avatar: string;
+  timestamp: Date;
+
+  constructor(content: string, avatar: string, timestamp: Date) {
+    this.content = content;
+    this.avatar = avatar;
+    this.timestamp = timestamp;
+  }
+}
+```
+
+Create a 'services' folder under 'src/app'. 
+Navigate to this folder on the command prompt and use the below command to generate a service
+```
+ng g s chatbot
+```
+
+Create a function ```getBotResponse``` that can be used to invoke the Dialogflow API and return response back to the user. We will hardcode a response for now and add the API calls later.
+```
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ChatbotService {
+
+  constructor() { }
+
+  public getBotResponse(message: string): Observable<string> {
+    // Hardcoded bot response - placeholder till we create the service
+    const hardCodedResponseMessage: string = `I'm still being built!`;
+    return of(hardCodedResponseMessage);
+  }
+}
+```
+
+Add the below code into ```chatbot.component.html```. This code provides a basic layout that allows user to enter and send a message. The top section would be used to list the messages being exchanged between the user and the bot.
+```
+<div class="container">
+	<div>
+		<ul class="list-group">
+			<li class="list-group-item" *ngFor="let message of messages">
+				<img [src]="message.avatar" [ngStyle]="{'width': '50px'}">
+				<div>
+					{{message.content}}
+				</div>
+				<div>
+					<i class="fa fa-clock-o" aria-hidden="true"></i>
+					<span>at {{message.timestamp | date : 'dd/MM/yyyy HH:mm' }}</span>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<form (onsubmit)="sendMessage()">
+		<div class="input-group mb-3">
+			<input type="text" class="form-control" placeholder="Enter your Message" name="content"
+				aria-label="Enter your Message" aria-describedby="Enter your Message" [(ngModel)]="message.content" />
+			<div class="input-group-append">
+				<button class="btn btn-primary" (click)="sendMessage()" type="submit">Send</button>
+			</div>
+		</div>
+	</form>
+</div>
+```
+
+Go to ```chatbot.component.ts``` and import the 'Message' model
+```
+import { Message } from '../models/message';
+```
+Also import the ```ChatbotService```
+```
+import { ChatbotService } from '../services/chatbot.service';
+```
+
+Add the function ```sendMessage()``` which would invoke the chatbot service function to get the bot response. Below is how the implementation would look like.
+```
+import { Component, OnInit } from '@angular/core';
+import { Message } from '../models/message';
+import { ChatbotService } from '../services/chatbot.service';
+
+@Component({
+  selector: 'app-chatbot',
+  templateUrl: './chatbot.component.html',
+  styleUrls: ['./chatbot.component.scss']
+})
+export class ChatbotComponent implements OnInit {
+
+  public message: Message;
+  public messages: Message[];
+
+  constructor(private chatbotService: ChatbotService) { }
+
+  ngOnInit(): void {
+    const welcomeMessage: Message = new Message('Hi there!', 'assets/images/bot.png', new Date());
+
+    this.message = new Message('', 'assets/images/user.png', new Date());
+    this.messages = [];
+
+    this.messages.push(welcomeMessage);
+  }
+
+  sendMessage(): void{
+    this.message.timestamp = new Date();
+    this.messages.push(this.message);
+
+    this.chatbotService.getBotResponse(this.message.content).subscribe(response => {
+      console.log(response);
+      const responseMessage: Message = new Message(response, 'assets/images/bot.png', new Date());
+      this.messages.push(responseMessage);
+    });
+
+    this.message = new Message('', 'assets/images/user.png', new Date());
+  }
+
+}
+```
