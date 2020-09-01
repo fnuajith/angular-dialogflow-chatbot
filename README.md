@@ -115,9 +115,9 @@ Add the below code into ```home.component.html``` to display a different message
 </div>
 ```
 
-Notice that there is a try it out option provided within the home screen content as well, just to demonstrate routing from thr '.ts' file. 
+Notice that there is a try it out option provided within the home screen content as well, just to demonstrate routing from the '.ts' file. 
 
-Import the angular router...
+Import the angular router into ```home.component.ts``` file...
 ```
 import { Router } from '@angular/router';
 ```
