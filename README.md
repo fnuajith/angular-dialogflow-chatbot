@@ -1,5 +1,11 @@
 # angular-dialogflow-chatbot
 
+The idea here is to create a simple Dialogflow agent and create an Angular application that interacts with the agent through APIs.
+
+There is an offering already available, [Dialogflow Web Demo](https://cloud.google.com/dialogflow/es/docs/integrations/web-demo), that can be leveraged to integrate the Dialogflow chatbot directly into your web application. With this implementation, you directly render the chatbot within an iframe in your application. This also means that you do not get to customize the branding or look and feel of the chatbot. Another limitation is that this integration only supports text responses.
+
+Implementing an application that interacts with the Dialogflow agent through APIs opens up ways where you can overcome the limitations of the Web Demo offering. We can build the bot with our own branding standards and also support rich content.
+
 ## Creating an angular project
 Open command prompt and navigate to the folder where you wish to create the application
 
