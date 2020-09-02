@@ -374,7 +374,7 @@ app.listen(port, () => {
 });
 ```
 
-You will need to replace '<your-project-id>' with your own project id that is linked to the Dialogflow chatbot, and replace '<path-to-your-service-account-json-key-file>' with the path to your own service account json key file.
+You will need to replace '\<your-project-id\>' with your own project id that is linked to the Dialogflow chatbot, and replace '\<path-to-your-service-account-json-key-file\>' with the path to your own service account json key file.
 
 Run this NodeJS/Express wrapper using the below command
 ```
