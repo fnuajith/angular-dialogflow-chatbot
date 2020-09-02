@@ -475,5 +475,3 @@ The response text from the API response can be accessed using 'response.data' pr
 Thats it! We should now have a working small talk chatbot integrated with our Angular application.
 
 Refresh the link ```http://localhost:4200/``` and send messages like 'Hello', 'Good morning', 'How are you' to see the responses from Dialogflow appearing in our angular application.
-
-### TODO: Document the steps within dialogflow to create a chatbot, enable small talk and service account creation steps
