@@ -17,8 +17,7 @@ Enable small talk by navigating to the small talk menu option on the left naviga
 Open the chatbot settings and click on project name
 ![New-agent](/docs/images/Enable-Dialogflow-APIs-1.JPG)
 
-Navigate to APIs and Services 
-![New-agent](/docs/images/Enable-Dialogflow-APIs-2.JPG)
+Navigate to APIs and Services
 
 Click on Enable APIs and Services
 ![New-agent](/docs/images/Enable-Dialogflow-APIs-4.JPG)
