@@ -251,3 +251,187 @@ export class ChatbotComponent implements OnInit {
 ```
 
 Refresh the link ```http://localhost:4200/```, we now have an interface where we can type and send text and a system that simply responds with a hardcoded message "*I'm still being built!*".
+
+## Creating a API wrapper project to invoke the Dialogflow APIs using NodeJS
+
+Create a new folder 'node-dialogflow-api-wrapper' in your workspace. We will be building an express js API wrapper inside this folder. We will then integrate this API with the angular application to achieve the end-to-end dialogflow integration.
+
+
+Navigate into the project
+```
+cd node-dialogflow-api-wrapper
+```
+Initialize a node project by running the below command
+```
+npm init
+```
+Simply hit RETURN to accept the defaults
+
+Install express
+```
+npm install express --save
+```
+
+Install dialogflow client library. This will be used to invoke the Dialogflow APIs [Reference](https://cloud.google.com/dialogflow/es/docs/quick/setup#lib)
+```
+npm install dialogflow
+```
+
+Using the google documentation on how to consume APIs as a [reference](https://cloud.google.com/dialogflow/es/docs/quick/api#detect_intent), the below code has been generated to expose an end point '/sendToDialogflow' that invokes the Dialogflow API and returns the response from Dialogflow API.
+
+Paste the below code into ```index.js``` file
+```
+const express = require("express");
+const dialogflow = require("dialogflow");
+const app = express();
+const port = 3000;
+
+// Enable CORS
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+
+  app.options("*", (req, res) => {
+    // allowed XHR methods
+    res.header(
+      "Access-Control-Allow-Methods",
+      "GET, PATCH, PUT, POST, DELETE, OPTIONS"
+    );
+    res.send();
+  });
+});
+
+const projectId = "<your-project-id>"; // projectId: ID of the GCP project where Dialogflow agent is deployed
+const sessionId = "654789"; // sessionId: String representing a random number or hashed user identifier
+const languageCode = "en"; // languageCode: Indicates the language Dialogflow agent should use to detect intents
+
+// Instantiates a session client
+//const sessionClient = new dialogflow.SessionsClient();
+const sessionClient = new dialogflow.SessionsClient({
+  keyFilename: "<path-to-your-service-account-json-key-file>",
+});
+
+async function detectIntent(
+  projectId,
+  sessionId,
+  query,
+  contexts,
+  languageCode
+) {
+  // The path to identify the agent that owns the created intent.
+  const sessionPath = sessionClient.sessionPath(projectId, sessionId);
+
+  // The text query request.
+  const request = {
+    session: sessionPath,
+    queryInput: {
+      text: {
+        text: query,
+        languageCode: languageCode,
+      },
+    },
+  };
+
+  if (contexts && contexts.length > 0) {
+    request.queryParams = {
+      contexts: contexts,
+    };
+  }
+
+  const responses = await sessionClient.detectIntent(request);
+  return responses[0];
+}
+
+app.get("/sendToDialogflow", async (req, res) => {
+  try {
+    const message = req.query.message;
+    console.log(`Sending text: ${message}`);
+    let intentResponse = await detectIntent(
+      projectId,
+      sessionId,
+      message,
+      [],
+      languageCode
+    );
+    console.log(
+      `Fulfillment Text: ${intentResponse.queryResult.fulfillmentText}`
+    );
+    res
+      .status(200)
+      .json({ data: `${intentResponse.queryResult.fulfillmentText}` });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: err });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`);
+});
+```
+
+You will need to replace '<your-project-id>' with your own project id that is linked to the Dialogflow chatbot, and replace '<path-to-your-service-account-json-key-file>' with the path to your own service account json key file.
+
+Run this NodeJS/Express wrapper using the below command
+```
+node index.js
+```
+
+You should see the below message
+```
+Example app listening at http://localhost:3000
+```
+
+We can now test this API by simply invoking the wrapper end point that we exposed and we should be able to see a response being sent back from Dialogflow
+```
+http://localhost:3000/sendToDialogflow?message=Hello
+```
+
+We have now successfully created a wrapper API that our angular application will use to talk to the Dialogflow API.
+
+## Integrate the wrapper API into the angular app
+
+Open the ```chatbot.service.ts``` file and replace the content with the below code. The code replaces the hardcoded response we previously had with a call to the wrapper API
+```
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ChatbotService {
+  url: string ='http://localhost:3000/sendToDialogflow?message=';
+
+  constructor(private http: HttpClient) {}
+
+  public getBotResponse(message: string): any {
+    return this.http.get(`http://localhost:3000/sendToDialogflow?message=${message}`);
+  }
+}
+```
+
+The response text from the API response can be accessed using 'response.data' property. Update the 'sendMessage()' method in 'chatbot.component.ts' to access the text response and push the response to the messages array.
+```
+  sendMessage(): void{
+    this.message.timestamp = new Date();
+    this.messages.push(this.message);
+
+    this.chatbotService.getBotResponse(this.message.content).subscribe(response => {
+      console.log('RESPONSE :' + response.data);
+      const responseMessage: Message = new Message(response.data, 'assets/images/bot.png', new Date());
+      this.messages.push(responseMessage);
+    });
+
+    this.message = new Message('', 'assets/images/user.png', new Date());
+  }
+```
+
+Thats it! We should now have a working small talk chatbot integrated with our Angular application.
+
+Refresh the link ```http://localhost:4200/``` and send messages like 'Hello', 'Good morning', 'How are you' to see the responses from Dialogflow appearing in our angular application.
+
+### TODO: Document the steps within dialogflow to create a chatbot, enable small talk and service account creation steps
