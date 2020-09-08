@@ -8,36 +8,36 @@ Implementing an application that interacts with the Dialogflow agent through API
 
 ## Creating a small talk Dialogflow agent
 
-Navigate to the dialogflow console and [create a new Agent](https://dialogflow.cloud.google.com/#/newAgent)
+Navigate to the dialogflow console and [create a new Agent](https://dialogflow.cloud.google.com/#/newAgent)  
 ![New-agent](/docs/images/New-agent.JPG)
 
-Enable small talk by navigating to the small talk menu option on the left navigation menu
+Enable small talk by navigating to the small talk menu option on the left navigation menu  
 ![New-agent](/docs/images/Enable-smalltalk.JPG)
 
-Open the chatbot settings and click on project name
+Open the chatbot settings and click on project name  
 ![New-agent](/docs/images/Enable-Dialogflow-APIs-1.JPG)
 
-Navigate to APIs and Services 
-![New-agent](/docs/images/Enable-Dialogflow-APIs-2.JPG)
+Navigate to APIs and Services  
+![New-agent](/docs/images/Enable-Dialogflow-APIs-3.JPG)
 
-Click on Enable APIs and Services
+Click on Enable APIs and Services  
 ![New-agent](/docs/images/Enable-Dialogflow-APIs-4.JPG)
 
-Search for Dialogflow in the API library and click on the Dialogflow API
+Search for Dialogflow in the API library and click on the Dialogflow API  
 ![New-agent](/docs/images/Enable-Dialogflow-APIs-5.JPG)
 
-Click Enable
+Click Enable  
 ![New-agent](/docs/images/Enable-Dialogflow-APIs-6.JPG)
 
-Let us now get the service account credentials file
+#### Let us now get the service account credentials file ####
 
-Go back to your dialogflow console and click on Service Account
+Go back to your dialogflow console and click on Service Account  
 ![New-agent](/docs/images/Service-account-1.JPG)
 
-Choose 'Create Key' by clicking on the vertical ellipsis
+Choose 'Create Key' by clicking on the vertical ellipsis  
 ![New-agent](/docs/images/Service-account-2.JPG)
 
-Choose key type as JSON and click create
+Choose key type as JSON and click create  
 ![New-agent](/docs/images/Service-account-3.JPG)
 
 A JSON file gets downloaded to your machine. Preserve this file. This is our credentials file, and we will need this to connect with the Dialogflow APIs
@@ -475,5 +475,3 @@ The response text from the API response can be accessed using 'response.data' pr
 Thats it! We should now have a working small talk chatbot integrated with our Angular application.
 
 Refresh the link ```http://localhost:4200/``` and send messages like 'Hello', 'Good morning', 'How are you' to see the responses from Dialogflow appearing in our angular application.
-
-### TODO: Document the steps within dialogflow to create a chatbot, enable small talk and service account creation steps
