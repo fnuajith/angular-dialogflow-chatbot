@@ -1,25 +1,39 @@
-<div class="container">
-	<div>
-		<ul class="list-group">
-			<li class="list-group-item" *ngFor="let message of messages">
-				<img [src]="message.avatar" [ngStyle]="{'width': '50px'}">
-				<div>
-					{{message.content}}
-				</div>
-				<div>
-					<i class="fa fa-clock-o" aria-hidden="true"></i>
-					<span>at {{message.timestamp | date : 'dd/MM/yyyy HH:mm' }}</span>
-				</div>
-			</li>
-		</ul>
-	</div>
-	<form (onsubmit)="sendMessage()">
-		<div class="input-group mb-3">
-			<input type="text" class="form-control" placeholder="Enter your Message" name="content"
-				aria-label="Enter your Message" aria-describedby="Enter your Message" [(ngModel)]="message.content" />
-			<div class="input-group-append">
-				<button class="btn btn-primary" (click)="sendMessage()" type="submit">Send</button>
-			</div>
-		</div>
-	</form>
+<mat-card>
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>Smart Assistant</mat-card-title>
+    <mat-card-subtitle>Powered by Google Dialogflow</mat-card-subtitle>
+  </mat-card-header>
+</mat-card>
+<mat-card class="card-content">
+  <mat-card-content>
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let message of messages">
+        <img [src]="message.avatar" [ngStyle]="{'width': '50px'}">
+        <div>
+          {{message.content}}
+        </div>
+        <div>
+          <i class="fa fa-clock-o" aria-hidden="true"></i>
+          <span>at {{message.timestamp | date : 'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+      </li>
+    </ul>
+    <div *ngIf="getCheckboxInput">
+      <app-checkbox></app-checkbox>
+    </div>
+    <div *ngIf="getRadioInput">
+      <app-radio></app-radio>
+    </div>
+  </mat-card-content>
+</mat-card>
+<br/>
+<div class="example-container">
+  <form (onsubmit)="sendMessage()">
+    <mat-form-field>
+      <mat-label>Enter your Message</mat-label>
+      <input matInput type="text" placeholder="Enter your Message" name="content" [(ngModel)]="message.content" />
+      <button mat-flat-button matSuffix color="accent" class="sendButton" (click)="sendMessage()" type="submit">Send</button>
+    </mat-form-field>
+  </form>
 </div>

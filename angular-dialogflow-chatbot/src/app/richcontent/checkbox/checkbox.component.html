@@ -1,0 +1,19 @@
+<mat-card>
+  <mat-card-content>
+    <h3>Please select one or more options and submit your choices</h3>
+    <form [formGroup]="checkboxGroup">
+      <section class="example-section">
+        <ng-container *ngFor="let checkbox of checkboxes; let i = index" formArrayName="checkboxes">
+          <mat-checkbox class="example-margin" color="primary" [formControlName]="i">{{checkbox.name}}</mat-checkbox>
+          <!-- <input type="checkbox" [formControlName]="i" />{{checkbox.name}} -->
+          <br/>
+        </ng-container>
+      </section>
+      <button mat-raised-button color="primary" (click)="submit()">Submit</button>
+    </form>
+  </mat-card-content>
+</mat-card>
+<!-- Checkbox values: {{ checkboxGroup.controls.checkboxes.value | json}}
+<br />
+Submitted values: {{ submittedValue | json}} -->
+

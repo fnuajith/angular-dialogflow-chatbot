@@ -1,0 +1,20 @@
+<mat-card>
+  <mat-card-content>
+    <h3>Please select one option submit your choice</h3>
+    <form [formGroup]="radioGroup">
+      <mat-radio-group class="example-radio-group" formControlName="radioOptions">
+        <mat-radio-button class="example-radio-button" color="primary" *ngFor="let radioOption of radioOptions" [value]="radioOption.value">
+          {{radioOption.name}}
+        </mat-radio-button>
+      </mat-radio-group>
+      <!-- <ng-container *ngFor="let radioOption of radioOptions">
+        <input type="radio" formControlName="radioOptions" name="radioOptions" [value]="radioOption.value"/>{{radioOption.name}}
+        <br />
+      </ng-container> -->
+      <button mat-raised-button color="primary" (click)="submit()">Submit</button>
+    </form>
+  </mat-card-content>
+</mat-card>
+<!-- Radio values: {{ radioGroup.controls.radioOptions.value | json}}
+<br />
+Submitted values: {{ submittedValue | json}} -->
