@@ -1,0 +1,14 @@
+<mat-card>
+  <mat-card-content>
+    <h3>Please choose one from the below options</h3>
+    <mat-chip-list>
+      <mat-chip
+        *ngFor="let reply of replies"
+        [selected]="reply.state"
+        (selectionChange)="changeSelected($event)"
+        (click)="reply.state=!reply.state">
+        {{reply.name}}
+      </mat-chip>
+    </mat-chip-list>
+  </mat-card-content>
+</mat-card>

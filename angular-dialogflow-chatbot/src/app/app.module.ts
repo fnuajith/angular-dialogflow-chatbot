@@ -18,6 +18,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatInputModule } from '@angular/material/input';
 import { MessageComponent } from './richcontent/message/message.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { QuickreplyComponent } from './richcontent/quickreply/quickreply.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { MessageComponent } from './richcontent/message/message.component';
     HomeComponent,
     CheckboxComponent,
     RadioComponent,
-    MessageComponent
+    MessageComponent,
+    QuickreplyComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +44,8 @@ import { MessageComponent } from './richcontent/message/message.component';
     MatCardModule,
     MatCheckboxModule,
     MatRadioModule,
-    MatInputModule
+    MatInputModule,
+    MatChipsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
