@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CheckboxService} from './checkbox.service';
@@ -8,13 +8,14 @@ import { CheckboxService} from './checkbox.service';
   templateUrl: './checkbox.component.html',
   styleUrls: ['./checkbox.component.scss']
 })
-export class CheckboxComponent implements OnInit, OnDestroy {
+export class CheckboxComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Reeference: https://stackoverflow.com/questions/40927167/angular-reactiveforms-producing-an-array-of-checkbox-values
 
   checkboxGroup: FormGroup;
   submittedValue: any;
   subscription: Subscription;
+  container: HTMLElement;
 
   checkboxes: {name: string, value: string}[];
   /*checkboxes = [{
@@ -53,6 +54,13 @@ export class CheckboxComponent implements OnInit, OnDestroy {
     };
     this.submittedValue = formValue;
     this.checkboxService.onCheckboxSelectionSubmitted(this.submittedValue);
+  }
+
+  ngAfterViewInit(): void {
+    // Reference https://medium.com/helper-studio/how-to-make-autoscroll-of-chat-when-new-message-adds-in-angular-68dd4e1e8acd
+    console.log('ngAfterViewInit...');
+    this.container = document.getElementById('msgContainer');
+    this.container.scrollTop = this.container.scrollHeight;
   }
 
   ngOnDestroy(): void {

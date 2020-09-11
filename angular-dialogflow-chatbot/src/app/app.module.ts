@@ -17,6 +17,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatInputModule } from '@angular/material/input';
+import { MessageComponent } from './richcontent/message/message.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { MatInputModule } from '@angular/material/input';
     ChatbotComponent,
     HomeComponent,
     CheckboxComponent,
-    RadioComponent
+    RadioComponent,
+    MessageComponent
   ],
   imports: [
     BrowserModule,
