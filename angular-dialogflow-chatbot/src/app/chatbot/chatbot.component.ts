@@ -35,10 +35,10 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   ngOnInit(): void {
     this.messages = [];
-    const welcomeMessage: Message = new Message('Hi there!', 'assets/images/bot.png', new Date());
+    const welcomeMessage: Message = {content: 'Hi there!', avatar: 'assets/images/bot.png', timestamp: new Date()};
     this.messages.push(welcomeMessage);
 
-    this.message = new Message('', 'assets/images/user.png', new Date());
+    this.message = {content: '', avatar: 'assets/images/user.png', timestamp: new Date()};
 
     this.getCheckboxInput = false;
     this.getRadioInput = false;
@@ -48,10 +48,11 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
       .subscribe((checkboxesSelected: any) => {
         console.log('Checkboxes selected by user :' + checkboxesSelected);
         this.getCheckboxInput = false; // Hide checkbox
-        this.message = new Message(
-          'TEMPORARILY DISPLAYING MY SELECTIONS BEFORE SENDING TO BOT: ' + checkboxesSelected,
-          'assets/images/user.png',
-          new Date());
+        this.message = {
+          content: 'TEMPORARILY DISPLAYING MY SELECTIONS BEFORE SENDING TO BOT: ' + checkboxesSelected,
+          avatar: 'assets/images/user.png',
+          timestamp: new Date()
+        };
         this.sendMessage(); // Send selections to the bot
       });
 
@@ -59,9 +60,11 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
       .subscribe((radioSelected: any) => {
         console.log('Radio option selected by user :' + radioSelected);
         this.getRadioInput = false; // Hide Radio
-        this.message = new Message('TEMPORARILY DISPLAYING MY SELECTION BEFORE SENDING TO BOT: ' + radioSelected,
-        'assets/images/user.png',
-        new Date());
+        this.message = {
+          content: 'TEMPORARILY DISPLAYING MY SELECTION BEFORE SENDING TO BOT: ' + radioSelected,
+          avatar: 'assets/images/user.png',
+          timestamp: new Date()
+        };
         this.sendMessage(); // Send selections to the bot
       });
 
@@ -69,9 +72,11 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
       .subscribe((quickReplySelected: any) => {
         console.log('Quick Reply selected by user :' + quickReplySelected);
         this.getQuickReplyInput = false; // Hide quickreply
-        this.message = new Message('TEMPORARILY DISPLAYING MY SELECTION BEFORE SENDING TO BOT: ' + quickReplySelected,
-        'assets/images/user.png',
-        new Date());
+        this.message = {
+          content: 'TEMPORARILY DISPLAYING MY SELECTION BEFORE SENDING TO BOT: ' + quickReplySelected,
+          avatar: 'assets/images/user.png',
+          timestamp: new Date()
+        };
         this.sendMessage(); // Send selections to the bot
       });
   }
@@ -84,8 +89,18 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
     console.log('Sending to bot :' + tempMessage);
     this.chatbotService.getBotResponse(this.message.content).subscribe(response => {
       console.log('Bot response :' + response.data);
-      const responseMessage: Message = new Message(response.data, 'assets/images/bot.png', new Date());
+      const responseMessage: Message = {content: response.data, avatar: 'assets/images/bot.png', timestamp: new Date()};
       this.messages.push(responseMessage);
+
+      // Temporarily push a message with image path into the array
+      if (tempMessage === 'cheer-me-up') {
+        const messageWithImage: Message = {
+          content: 'This should brighten up your day!',
+          avatar: 'assets/images/bot.png',
+          imagePath: 'https://homepages.cae.wisc.edu/~ece533/images/tulips.png',
+          timestamp: new Date()};
+        this.messages.push(messageWithImage);
+      }
 
       // Temporarily trigger checkbox based on user input. To be switched to be displayed based on bot response
       if (tempMessage === 'checkbox') {
@@ -118,7 +133,7 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
       }
     });
 
-    this.message = new Message('', 'assets/images/user.png', new Date());
+    this.message = {content: '', avatar: 'assets/images/user.png', timestamp: new Date()};
   }
 
   ngOnDestroy(): void {

@@ -2,6 +2,12 @@
 <div>
   {{message.content}}
 </div>
+<div class="message-image" *ngIf="message.imagePath">
+  <img
+    [src]="message.imagePath"
+    [alt]="message.imagePath"
+    (click)="onImageClick(message.imagePath)">
+</div>
 <div>
   <i class="fa fa-clock-o" aria-hidden="true"></i>
   <span>at {{message.timestamp | date : 'dd/MM/yyyy HH:mm' }}</span>

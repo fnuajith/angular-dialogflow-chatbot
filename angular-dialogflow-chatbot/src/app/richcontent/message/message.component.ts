@@ -16,6 +16,10 @@ export class MessageComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
   }
 
+  onImageClick(link: string): void {
+    window.open(link);
+  }
+
   ngAfterViewInit(): void {
     // Reference https://medium.com/helper-studio/how-to-make-autoscroll-of-chat-when-new-message-adds-in-angular-68dd4e1e8acd
     console.log('ngAfterViewInit...');
