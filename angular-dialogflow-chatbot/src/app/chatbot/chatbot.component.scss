@@ -17,6 +17,20 @@ mat-form-field {
   width: 100%;
 }
 
-.sendButton {
+.actionButton {
   margin: 5px auto;
+}
+
+input[type="file"] {
+  visibility: hidden;
+}
+
+.image-preview {
+
+  height: 5rem;
+  margin: 1rem 0;
+
+  img {
+    height: 100%;
+  }
 }

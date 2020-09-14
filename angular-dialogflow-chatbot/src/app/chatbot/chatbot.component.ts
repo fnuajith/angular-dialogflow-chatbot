@@ -21,6 +21,7 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
   checkboxSelectionSubscription: Subscription;
   radioSelectionSubscription: Subscription;
   quickReplySelectionSubscription: Subscription;
+  imagePreview: string;
 
   constructor(
     private chatbotService: ChatbotService,
@@ -83,7 +84,11 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   sendMessage(): void{
     this.message.timestamp = new Date();
+    if (this.imagePreview && this.imagePreview !== '') {
+      this.message.imagePath = this.imagePreview.slice();
+    }
     this.messages.push(this.message);
+    this.imagePreview = '';
 
     const tempMessage = this.message.content.slice();
     console.log('Sending to bot :' + tempMessage);
@@ -134,6 +139,15 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
     });
 
     this.message = {content: '', avatar: 'assets/images/user.png', timestamp: new Date()};
+  }
+
+  onImagePicked(event: Event): void {
+    const file = (event.target as HTMLInputElement).files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = (reader.result as string);
+    };
+    reader.readAsDataURL(file);
   }
 
   ngOnDestroy(): void {

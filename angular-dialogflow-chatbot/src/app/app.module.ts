@@ -19,6 +19,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatInputModule } from '@angular/material/input';
 import { MessageComponent } from './richcontent/message/message.component';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
 import { QuickreplyComponent } from './richcontent/quickreply/quickreply.component';
 
 @NgModule({
@@ -45,7 +46,8 @@ import { QuickreplyComponent } from './richcontent/quickreply/quickreply.compone
     MatCheckboxModule,
     MatRadioModule,
     MatInputModule,
-    MatChipsModule
+    MatChipsModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]

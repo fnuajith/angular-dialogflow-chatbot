@@ -9,14 +9,6 @@
   <mat-card-content>
     <ul class="list-group">
       <li class="list-group-item" *ngFor="let message of messages">
-        <!-- <img [src]="message.avatar" [ngStyle]="{'width': '50px'}">
-        <div>
-          {{message.content}}
-        </div>
-        <div>
-          <i class="fa fa-clock-o" aria-hidden="true"></i>
-          <span>at {{message.timestamp | date : 'dd/MM/yyyy HH:mm' }}</span>
-        </div> -->
         <app-message [message]="message"></app-message>
       </li>
     </ul>
@@ -37,7 +29,14 @@
     <mat-form-field>
       <mat-label>Enter your Message</mat-label>
       <input matInput type="text" placeholder="Enter your Message" name="content" [(ngModel)]="message.content" />
-      <button mat-flat-button matSuffix color="accent" class="sendButton" (click)="sendMessage()" type="submit">Send</button>
+      <div class="image-preview" *ngIf="imagePreview && imagePreview !==''">
+        <img [src]="imagePreview" [alt]="imagePreview">
+      </div>
+      <div matSuffix>
+        <button mat-flat-button class="actionButton" (click)="filePicker.click()" type="button">Pick Image</button>
+        <button mat-flat-button color="accent" class="actionButton" (click)="sendMessage()" type="submit">Send</button>
+      </div>
     </mat-form-field>
   </form>
 </div>
+<input type="file" #filePicker (change)="onImagePicked($event)">
