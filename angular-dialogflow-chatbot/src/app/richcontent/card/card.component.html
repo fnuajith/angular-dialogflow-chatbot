@@ -1,34 +1,12 @@
-<div [ngStyle]="{'display': 'flex'}">
 <mat-card class="example-card">
-  <mat-card-header>
-    <mat-card-title>Chefs' secret</mat-card-title>
-    <mat-card-subtitle>Speciality pizza</mat-card-subtitle>
-  </mat-card-header>
-  <img mat-card-image src="https://images.freeimages.com/images/large-previews/45d/pizza-1312224.jpg" alt="Photo of the pizza">
+  <img mat-card-image [src]="cardData.imageSourceLink" alt="Photo">
   <mat-card-content>
     <p>
-      Our mouth watering speciality. The recipie is a secret, only known to our in-house chef. A treat to your taste buds!
+      {{cardData.content}}
     </p>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-button>Buy Now</button>
+    <a mat-button [href]="cardData.imageRedirectLink">Buy Now</a>
   </mat-card-actions>
 </mat-card>
-<mat-card class="example-card">
-  <mat-card-header>
-    <mat-card-title>Veggie speciality</mat-card-title>
-    <mat-card-subtitle>Speciality pizza</mat-card-subtitle>
-  </mat-card-header>
-  <img mat-card-image src="https://images.freeimages.com/images/large-previews/22e/pizza-1-1326545.jpg" alt="Photo of the pizza">
-  <mat-card-content>
-    <p>
-      Vegetarians rejoice! Our very own veggie speciality, packed with the goodness of greens and vegetables and feta cheese.
-      This one is sure to tingle your taste buds.
-    </p>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-button>Buy Now</button>
-  </mat-card-actions>
-</mat-card>
-</div>
 

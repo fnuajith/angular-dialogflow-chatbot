@@ -1,5 +1,7 @@
 import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
 import { Message } from '../../models/message';
+import { ResponseData } from '../../models/responseData';
+import { CardService } from '../card/card.service';
 
 @Component({
   selector: 'app-message',
@@ -9,11 +11,20 @@ import { Message } from '../../models/message';
 export class MessageComponent implements OnInit, AfterViewInit {
 
   @Input() message: Message;
+  showCards = false;
+  cards: ResponseData[];
+
   container: HTMLElement;
 
-  constructor() { }
+  constructor(public cardService: CardService) { }
 
   ngOnInit(): void {
+    this.showCards = false;
+    this.cards = [];
+    if (this.message && this.message.content === 'show-card-response') {
+      this.showCards = true;
+      this.cards = this.cardService.getCards();
+    }
   }
 
   onImageClick(link: string): void {

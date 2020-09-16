@@ -5,6 +5,7 @@ import { ChatbotService } from '../services/chatbot.service';
 import { CheckboxService } from '../richcontent/checkbox/checkbox.service';
 import { RadioService } from '../richcontent/radio/radio.service';
 import { QuickreplyService } from '../richcontent/quickreply/quickreply.service';
+import { CardService } from '../richcontent/card/card.service';
 import { ContentChange } from 'ngx-quill';
 
 @Component({
@@ -49,6 +50,7 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
     private checkboxService: CheckboxService,
     private radioService: RadioService,
     private quickreplyService: QuickreplyService,
+    private cardService: CardService,
     private cdr: ChangeDetectorRef) { }
 
   onContentChange(event: ContentChange): void {
@@ -153,6 +155,10 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
           responseMessage.content = response.responseData.content;
           this.quickreplyService.setQuickReplyOptions(response.responseData.options);
           this.getQuickReplyInput = true;
+          break;
+        case 'cards':
+          responseMessage.content = 'show-card-response';
+          this.cardService.setCards(response.responseData);
           break;
         default:
           responseMessage.content = 'Unknown response type received as response. Contact support!!';

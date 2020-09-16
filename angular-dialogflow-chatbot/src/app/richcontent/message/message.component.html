@@ -1,5 +1,5 @@
 <img [src]="message.avatar" [ngStyle]="{'width': '50px'}">
-<div>
+<div *ngIf="!showCards">
   <!-- {{message.content}} -->
   <quill-editor
         class="no-margin"
@@ -8,7 +8,11 @@
         [sanitize]="true"
         [modules]="{toolbar: false}"></quill-editor>
 </div>
-<!-- <app-card></app-card> -->
+<div *ngIf="showCards" [ngStyle]="{'display': 'flex'}">
+  <div *ngFor="let cardData of cards">
+    <app-card [cardData]="cardData"></app-card>
+  </div>
+</div>
 <div class="message-image" *ngIf="message.imageSrc">
   <img
     [src]="message.imageSrc"
