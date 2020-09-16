@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,7 +20,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MessageComponent } from './richcontent/message/message.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field'
 import { QuickreplyComponent } from './richcontent/quickreply/quickreply.component';
+import { QuillModule } from 'ngx-quill';
+import { MatQuillModule } from './mat-quill/mat-quill-module';
+import { CardComponent } from './richcontent/card/card.component'
 
 @NgModule({
   declarations: [
@@ -30,7 +34,8 @@ import { QuickreplyComponent } from './richcontent/quickreply/quickreply.compone
     CheckboxComponent,
     RadioComponent,
     MessageComponent,
-    QuickreplyComponent
+    QuickreplyComponent,
+    CardComponent
   ],
   imports: [
     BrowserModule,
@@ -47,9 +52,13 @@ import { QuickreplyComponent } from './richcontent/quickreply/quickreply.compone
     MatRadioModule,
     MatInputModule,
     MatChipsModule,
-    MatIconModule
+    MatIconModule,
+    MatFormFieldModule,
+    MatQuillModule,
+    QuillModule.forRoot()
   ],
   providers: [],
+  schemas: [NO_ERRORS_SCHEMA],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

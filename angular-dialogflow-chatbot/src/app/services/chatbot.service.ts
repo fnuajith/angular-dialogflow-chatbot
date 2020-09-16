@@ -10,10 +10,7 @@ export class ChatbotService {
 
   constructor(private http: HttpClient) {}
 
-  public getBotResponse(message: string): any {
-    return this.http.get(`http://localhost:3000/sendToDialogflow?message=${message}`);
-    // Hardcoded bot response - placeholder till we create the service
-    //const hardCodedResponseMessage: string = `I'm still being built!`;
-    //return of(hardCodedResponseMessage);
+  public getBotResponse(userInputMessage: string): any {
+    return this.http.post(`http://localhost:3000/sendToDialogflow`, {message: userInputMessage});
   }
 }

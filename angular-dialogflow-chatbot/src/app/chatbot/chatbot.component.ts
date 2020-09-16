@@ -5,6 +5,7 @@ import { ChatbotService } from '../services/chatbot.service';
 import { CheckboxService } from '../richcontent/checkbox/checkbox.service';
 import { RadioService } from '../richcontent/radio/radio.service';
 import { QuickreplyService } from '../richcontent/quickreply/quickreply.service';
+import { ContentChange } from 'ngx-quill';
 
 @Component({
   selector: 'app-chatbot',
@@ -12,6 +13,26 @@ import { QuickreplyService } from '../richcontent/quickreply/quickreply.service'
   styleUrls: ['./chatbot.component.scss']
 })
 export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
+
+  messageList: string[] = [];
+  richText: string;
+
+  modules = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike', 'link'], // toggled buttons
+      ['blockquote', 'code-block'],
+      [{header: 1 }, {header: 2 }], // custom button values
+      [{list: 'ordered'}, {list: 'bullet' }],
+      [{script: 'sub'}, {script: 'super' }], // superscript/subscript
+      [{indent: '-1'}, {indent: '+1' }], // outdent/indent
+      [{size: ['small', false, 'large', 'huge'] }], // custom dropdown
+      [{header: [1, 2, 3, 4, 5, 6, false] }],
+      [{color: [] }, {background: [] }], // dropdown with defaults from theme
+      [{font: [] }],
+      [{align: [] }],
+      ['clean'] // remove formatting button
+    ]
+  };
 
   public message: Message;
   public messages: Message[];
@@ -29,6 +50,17 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
     private radioService: RadioService,
     private quickreplyService: QuickreplyService,
     private cdr: ChangeDetectorRef) { }
+
+  onContentChange(event: ContentChange): void {
+    console.log('editor-change', event);
+  }
+
+  onAddToList(): void {
+    if (this.richText && this.richText !== '') {
+      this.messageList.push(this.richText.slice());
+    }
+    this.richText = '';
+  }
 
   ngAfterViewChecked(): void {
     this.cdr.detectChanges();
@@ -50,7 +82,7 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
         console.log('Checkboxes selected by user :' + checkboxesSelected);
         this.getCheckboxInput = false; // Hide checkbox
         this.message = {
-          content: 'TEMPORARILY DISPLAYING MY SELECTIONS BEFORE SENDING TO BOT: ' + checkboxesSelected,
+          content: checkboxesSelected,
           avatar: 'assets/images/user.png',
           timestamp: new Date()
         };
@@ -62,7 +94,7 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
         console.log('Radio option selected by user :' + radioSelected);
         this.getRadioInput = false; // Hide Radio
         this.message = {
-          content: 'TEMPORARILY DISPLAYING MY SELECTION BEFORE SENDING TO BOT: ' + radioSelected,
+          content: radioSelected,
           avatar: 'assets/images/user.png',
           timestamp: new Date()
         };
@@ -74,7 +106,7 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
         console.log('Quick Reply selected by user :' + quickReplySelected);
         this.getQuickReplyInput = false; // Hide quickreply
         this.message = {
-          content: 'TEMPORARILY DISPLAYING MY SELECTION BEFORE SENDING TO BOT: ' + quickReplySelected,
+          content: quickReplySelected,
           avatar: 'assets/images/user.png',
           timestamp: new Date()
         };
@@ -85,57 +117,48 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
   sendMessage(): void{
     this.message.timestamp = new Date();
     if (this.imagePreview && this.imagePreview !== '') {
-      this.message.imagePath = this.imagePreview.slice();
+      this.message.imageSrc = this.imagePreview.slice();
     }
     this.messages.push(this.message);
     this.imagePreview = '';
 
-    const tempMessage = this.message.content.slice();
-    console.log('Sending to bot :' + tempMessage);
     this.chatbotService.getBotResponse(this.message.content).subscribe(response => {
-      console.log('Bot response :' + response.data);
-      const responseMessage: Message = {content: response.data, avatar: 'assets/images/bot.png', timestamp: new Date()};
+      console.log('Bot response :' + response);
+      const responseType = response.responseType;
+      const responseMessage: Message = {
+        content: '',
+        avatar: 'assets/images/bot.png',
+        timestamp: new Date()
+      };
+      switch (responseType) {
+        case 'text':
+          responseMessage.content = response.responseData.content;
+          break;
+        case 'text-with-image':
+          responseMessage.content = response.responseData.content;
+          responseMessage.imageSrc = response.responseData.imageSourceLink;
+          responseMessage.imageLink = response.responseData.imageRedirectLink;
+          break;
+        case 'checkbox':
+          responseMessage.content = response.responseData.content;
+          this.checkboxService.setCheckboxOptions(response.responseData.options);
+          this.getCheckboxInput = true;
+          break;
+        case 'radio':
+          responseMessage.content = response.responseData.content;
+          this.radioService.setRadioOptions(response.responseData.options);
+          this.getRadioInput = true;
+          break;
+        case 'quickreply':
+          responseMessage.content = response.responseData.content;
+          this.quickreplyService.setQuickReplyOptions(response.responseData.options);
+          this.getQuickReplyInput = true;
+          break;
+        default:
+          responseMessage.content = 'Unknown response type received as response. Contact support!!';
+          break;
+      }
       this.messages.push(responseMessage);
-
-      // Temporarily push a message with image path into the array
-      if (tempMessage === 'cheer-me-up') {
-        const messageWithImage: Message = {
-          content: 'This should brighten up your day!',
-          avatar: 'assets/images/bot.png',
-          imagePath: 'https://homepages.cae.wisc.edu/~ece533/images/tulips.png',
-          timestamp: new Date()};
-        this.messages.push(messageWithImage);
-      }
-
-      // Temporarily trigger checkbox based on user input. To be switched to be displayed based on bot response
-      if (tempMessage === 'checkbox') {
-        // Hardcoded for now
-        const checkboxes = [
-          { name: 'Checking', value: 'chq' },
-          { name: 'Savings', value: 'svg' },
-          { name: 'Credit Card', value: 'ccd'}];
-        this.checkboxService.setCheckboxOptions(checkboxes);
-        this.getCheckboxInput = true;
-      }
-
-      // Temporarily trigger radio based on user input. To be switched to be displayed based on bot response
-      if (tempMessage === 'radio') {
-        // Hardcoded for now
-        const radioOptions = [
-          { name: 'Male', value: 'male' },
-          { name: 'Female', value: 'female' },
-          { name: 'Other', value: 'other'}];
-        this.radioService.setRadioOptions(radioOptions);
-        this.getRadioInput = true;
-      }
-
-      // Temporarily trigger quickreply based on user input. To be switched to be displayed based on bot response
-      if (tempMessage === 'quickreply') {
-        // Hardcoded for now
-        const replies = [{ name: 'Yes' }, { name: 'No' }, { name: 'Maybe' }];
-        this.quickreplyService.setQuickReplyOptions(replies);
-        this.getQuickReplyInput = true;
-      }
     });
 
     this.message = {content: '', avatar: 'assets/images/user.png', timestamp: new Date()};

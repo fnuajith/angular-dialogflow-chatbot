@@ -1,12 +1,19 @@
 <img [src]="message.avatar" [ngStyle]="{'width': '50px'}">
 <div>
-  {{message.content}}
+  <!-- {{message.content}} -->
+  <quill-editor
+        class="no-margin"
+        [ngModel]="message.content"
+        [readOnly]="true"
+        [sanitize]="true"
+        [modules]="{toolbar: false}"></quill-editor>
 </div>
-<div class="message-image" *ngIf="message.imagePath">
+<!-- <app-card></app-card> -->
+<div class="message-image" *ngIf="message.imageSrc">
   <img
-    [src]="message.imagePath"
-    [alt]="message.imagePath"
-    (click)="onImageClick(message.imagePath)">
+    [src]="message.imageSrc"
+    [alt]="message.imageSrc"
+    (click)="onImageClick(message.imageLink)">
 </div>
 <div>
   <i class="fa fa-clock-o" aria-hidden="true"></i>

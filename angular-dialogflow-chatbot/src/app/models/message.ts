@@ -2,5 +2,6 @@ export interface Message {
   content: string;
   avatar: string;
   timestamp: Date;
-  imagePath?: string;
+  imageSrc?: string;
+  imageLink?: string;
 }

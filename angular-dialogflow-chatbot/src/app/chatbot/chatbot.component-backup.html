@@ -26,7 +26,7 @@
 <br/>
 <div class="example-container">
   <form (onsubmit)="sendMessage()">
-    <mat-form-field appearance="fill">
+    <mat-form-field>
       <mat-label>Enter your Message</mat-label>
       <input matInput type="text" placeholder="Enter your Message" name="content" [(ngModel)]="message.content" />
       <div class="image-preview" *ngIf="imagePreview && imagePreview !==''">
@@ -36,21 +36,32 @@
         <button mat-flat-button class="actionButton" (click)="filePicker.click()" type="button">Pick Image</button>
         <button mat-flat-button color="accent" class="actionButton" (click)="sendMessage()" type="submit">Send</button>
       </div>
-      <!-- <mat-quill
-      name="content"
-      [(ngModel)]="message.content"
-      [modules]="modules"
-      [sanitize]="true"
-      [styles]="{height: '100px'}"
-      (onEditorChanged)="onContentChange($event)"></mat-quill>
-      <div class="image-preview" *ngIf="imagePreview && imagePreview !==''">
-        <img [src]="imagePreview" [alt]="imagePreview">
-      </div>
-      <button mat-raised-button class="actionButton" (click)="filePicker.click()" type="button">Pick Image</button>
-      <div matSuffix>
-        <button mat-flat-button color="accent" class="actionButton" (click)="sendMessage()" type="submit">Send</button>
-      </div> -->
     </mat-form-field>
   </form>
 </div>
 <input type="file" #filePicker (change)="onImagePicked($event)">
+<br/>
+<h2>Rich content support demo</h2>
+<hr/>
+<div>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let msg of messageList">
+      <quill-editor
+        class="no-margin"
+        [ngModel]="msg"
+        [readOnly]="true"
+        [modules]="{toolbar: false}"></quill-editor>
+    </li>
+  </ul>
+  <mat-form-field appearance="fill">
+    <mat-quill
+      [(ngModel)]="richText"
+      [modules]="modules"
+      [sanitize]="true"
+      [styles]="{height: '100px'}"
+      (onEditorChanged)="onContentChange($event)"></mat-quill>
+    <div matSuffix>
+      <button mat-flat-button color="warn" class="actionButton" (click)="onAddToList()">Send RichContent</button>
+    </div>
+  </mat-form-field>
+</div>

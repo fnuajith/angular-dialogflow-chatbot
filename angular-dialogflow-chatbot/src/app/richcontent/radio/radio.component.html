@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-content>
-    <h3>Please select one option and submit your choice</h3>
+    <h3>Select one option and submit your choice</h3>
     <form [formGroup]="radioGroup">
       <mat-radio-group class="example-radio-group" formControlName="radioOptions">
         <mat-radio-button class="example-radio-button" color="primary" *ngFor="let radioOption of radioOptions" [value]="radioOption.value">
