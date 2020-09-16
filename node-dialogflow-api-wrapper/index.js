@@ -1,7 +1,11 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const dialogflow = require("dialogflow");
 const app = express();
 const port = 3000;
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Enable CORS
 app.use((req, res, next) => {
@@ -56,9 +60,9 @@ async function detectIntent(
   return responses[0];
 }
 
-app.get("/sendToDialogflow", async (req, res) => {
+app.post('/sendToDialogflow', async(req, res) => {
   try {
-    const message = req.query.message;
+    const message = req.body.message;
     console.log(`Sending text: ${message}`);
     let intentResponse = await detectIntent(
       projectId,
@@ -70,15 +74,77 @@ app.get("/sendToDialogflow", async (req, res) => {
     console.log(
       `Fulfillment Text: ${intentResponse.queryResult.fulfillmentText}`
     );
-    res
-      .status(200)
-      .json({ data: `${intentResponse.queryResult.fulfillmentText}` });
+    // res.status(200).json({ data: `${intentResponse.queryResult.fulfillmentText}` });
+    res.status(200).json(getDummyResponses(message, intentResponse.queryResult.fulfillmentText));
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: err });
   }
 });
 
+getDummyResponses = (userInputMessage, botResponseMessage) => {
+  var response;
+  if (userInputMessage.includes('text-with-image')) {
+    response = {
+      responseType: "text-with-image",
+      responseData: {
+        content: "This should brighten up your day!",
+        imageSourceLink: "https://homepages.cae.wisc.edu/~ece533/images/tulips.png",
+        imageRedirectLink: "https://homepages.cae.wisc.edu/~ece533/images/tulips.png"
+      }
+    }
+  }
+  else if (userInputMessage.includes('checkbox')) {
+    response = {
+      responseType: "checkbox",
+      responseData: {
+        content: "Please choose account types from the below options",
+        options: [
+          { name: 'Checking', value: 'Checking' },
+          { name: 'Savings', value: 'Savings' },
+          { name: 'Credit Card', value: 'Credit Card'}
+        ]
+      }
+    };
+  }
+  else if (userInputMessage.includes('radio')) {
+    response = {
+      responseType: "radio",
+      responseData: {
+        content: "Please choose a gender",
+        options: [
+          { name: 'Male', value: 'Male' },
+          { name: 'Female', value: 'Female' },
+          { name: 'Other', value: 'Other'}
+        ]
+      }
+    };
+  }
+  else if (userInputMessage.includes('quickreply')) {
+    response = {
+      responseType: "quickreply",
+      responseData: {
+        content: "Do you agree?",
+        options: [
+          { name: "Yes" },
+          { name: "No" },
+          { name: "Maybe" }
+        ]
+      }
+    }
+  }
+  else {
+    response = {
+      responseType: "text",
+      responseData: {
+        content: botResponseMessage
+      }
+    };
+  }
+  return response;
+};
+
+// Start the node server
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
