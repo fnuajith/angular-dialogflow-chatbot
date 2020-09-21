@@ -133,6 +133,21 @@ getDummyResponses = (userInputMessage, botResponseMessage) => {
       }
     }
   }
+  else if (userInputMessage.includes('cards')) {
+    response = {
+      responseType: "cards",
+      responseData: [{
+        content: "This is our Chefs' speciality. It is sure to tingle your taste buds!",
+        imageSourceLink: "https://images.freeimages.com/images/large-previews/45d/pizza-1312224.jpg",
+        imageRedirectLink: "http://www.google.com"
+      },
+      {
+        content: "Treat yourself to this all vegetarian delight. Trust us, you will not be disappointed!",
+        imageSourceLink: "https://images.freeimages.com/images/large-previews/22e/pizza-1-1326545.jpg",
+        imageRedirectLink: "http://www.google.com"
+      }]
+    }
+  }
   else {
     response = {
       responseType: "text",
